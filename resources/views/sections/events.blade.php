@@ -1,3 +1,4 @@
+@if(isset($events) && count($events) > 0)
 <section class="ftco-section bg-light">
     <div class="container">
         <div class="row justify-content-center mb-5 pb-3">
@@ -14,12 +15,12 @@
                         <div class="meta mb-3">
                             <div><a href="#">{{ $event['date'] }}</a></div>
                             <div><a href="#">{{ $event['organizer'] }}</a></div>
-                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> {{ $event['comments'] }}</a></div>
+                            {{-- <div><a href="#" class="meta-chat"><span class="icon-chat"></span> {{ $event['comments'] }}</a></div> --}}
                         </div>
                         <h3 class="heading mb-4"><a href="#">{{ $event['title'] }}</a></h3>
                         <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> {{ $event['time'] }}</span> <span><i class="icon-map-o"></i> {{ $event['venue'] }}</span></p>
                         <p>{{ $event['description'] }}</p>
-                        <p><a href="{{ url('event') }}">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+                        {{-- <p><a href="{{ url('event') }}">Join Event <i class="ion-ios-arrow-forward"></i></a></p> --}}
                     </div>
                 </div>
             </div>
@@ -27,3 +28,4 @@
         </div>
     </div>
 </section>
+@endif

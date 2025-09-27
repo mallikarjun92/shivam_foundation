@@ -9168,3 +9168,8 @@ textarea.form-control {
 .awake .logo-image {
     width: 120px;
 }
+.about-author .bio .icon-person {
+    font-size: 50px;
+    color: #f86f2d;
+    margin-bottom: 20px;
+}

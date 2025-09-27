@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/aos.css') }}">
+    <link href="{{asset('favicon.png')}}" rel="icon">
 
     <link rel="stylesheet" href="{{ asset('css/ionicons.min.css') }}">
 
@@ -26,7 +27,7 @@
     <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    
+    @stack('head')
     @stack('styles')
   </head>
   <body>

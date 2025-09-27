@@ -1,0 +1,165 @@
+@extends('layouts.app')
+
+@section('title', $blog['title'] . ' - Vishwam Foundation')
+
+@section('content')
+    
+    <div class="hero-wrap" style="background-image: url('{{ asset('images/bg_2.jpg') }}');" data-stellar-background-ratio="0.5">
+    {{-- <div class="hero-wrap" style="background-image: url('{{ asset($blog['image'] ?? ``) }}');" data-stellar-background-ratio="0.5"> --}}
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+          <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                 <span class="mr-2"><a href="{{ url('/') }}">Home</a></span> 
+                 <span class="mr-2"><a href="{{ route('blog.index') }}">Blog</a></span> 
+                 <span>{{ Str::limit($blog['title'], 20) }}</span>
+             </p>
+            <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{ $blog['title'] }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 ftco-animate">
+            <h2 class="mb-3">{{ $blog['title'] }}</h2>
+            <p>
+                <img src="{{ asset($blog['image']) }}" alt="" class="img-fluid">
+            </p>
+            
+            {!! $blog['content'] !!}
+            
+            <div class="about-author d-flex p-4 bg-light">
+              <div class="bio mr-5" style="width: 50px; height: auto;">
+                {{-- <img src="{{ asset('images/person_1.jpg') }}" alt="Image placeholder" class="img-fluid mb-4"> --}}
+                <span class="icon-person"></span>
+              </div>
+              <div class="desc">
+                <h3>{{ $blog['author'] }}</h3>
+                {{-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p> --}}
+              </div>
+            </div>
+
+            {{-- <div class="pt-5 mt-5">
+              <h3 class="mb-5">3 Comments</h3>
+              <ul class="comment-list">
+                <li class="comment">
+                  <div class="vcard bio">
+                    <img src="{{ asset('images/person_1.jpg') }}" alt="Image placeholder">
+                  </div>
+                  <div class="comment-body">
+                    <h3>John Doe</h3>
+                    <div class="meta">Sept. 12, 2018 at 2:21pm</div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+                    <p><a href="#" class="reply">Reply</a></p>
+                  </div>
+                </li>
+
+                <li class="comment">
+                  <div class="vcard bio">
+                    <img src="{{ asset('images/person_1.jpg') }}" alt="Image placeholder">
+                  </div>
+                  <div class="comment-body">
+                    <h3>John Doe</h3>
+                    <div class="meta">Sept. 12, 2018 at 2:21pm</div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
+                    <p><a href="#" class="reply">Reply</a></p>
+                  </div>
+                </li>
+              </ul>
+              <!-- END comment-list -->
+              
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Leave a comment</h3>
+                <form action="#" class="p-5 bg-light">
+                  <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" class="form-control" id="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" class="form-control" id="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="url" class="form-control" id="website">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                  </div>
+
+                </form>
+              </div>
+            </div> --}}
+
+          </div> <!-- .col-md-8 -->
+          
+          <div class="col-lg-4 sidebar ftco-animate">
+            {{-- <div class="sidebar-box">
+              <form action="#" class="search-form">
+                <div class="form-group">
+                  <span class="icon icon-search"></span>
+                  <input type="text" class="form-control" placeholder="Type a keyword and hit enter">
+                </div>
+              </form>
+            </div> --}}
+            
+            {{-- <div class="sidebar-box ftco-animate">
+              <h3 class="heading">Categories</h3>
+              <ul class="categories">
+                <li><a href="#">Charity <span>(12)</span></a></li>
+                <li><a href="#">Non-Profit <span>(22)</span></a></li>
+                <li><a href="#">Donation <span>(37)</span></a></li>
+                <li><a href="#">Fundraising <span>(42)</span></a></li>
+                <li><a href="#">Volunteer <span>(14)</span></a></li>
+              </ul>
+            </div> --}}
+
+            <div class="sidebar-box ftco-animate">
+              <h3 class="heading">Recent Blog</h3>
+              @foreach($recentBlogs as $recentBlog)
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url({{ asset($recentBlog['image']) }});"></a>
+                <div class="text">
+                  <h3 class="heading-1"><a href="{{ route('blog.showBlogDetail', $recentBlog['slug']) }}">{{ $recentBlog['title'] }}</a></h3>
+                  <div class="meta">
+                    <div><a href="{{ $recentBlog['link'] }}"><span class="icon-calendar"></span> {{ $recentBlog['date'] }}</a></div>
+                  </div>
+                </div>
+              </div>
+              @endforeach
+            </div>
+
+            {{-- <div class="sidebar-box ftco-animate">
+              <h3 class="heading">Tag Cloud</h3>
+              <div class="tagcloud">
+                <a href="#" class="tag-cloud-link">charity</a>
+                <a href="#" class="tag-cloud-link">donate</a>
+                <a href="#" class="tag-cloud-link">non-profit</a>
+                <a href="#" class="tag-cloud-link">organization</a>
+                <a href="#" class="tag-cloud-link">help</a>
+                <a href="#" class="tag-cloud-link">volunteer</a>
+                <a href="#" class="tag-cloud-link">support</a>
+                <a href="#" class="tag-cloud-link">community</a>
+              </div>
+            </div> --}}
+
+            {{-- <div class="sidebar-box ftco-animate">
+              <h3 class="heading">Paragraph</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+            </div> --}}
+          </div><!-- END COL -->
+        </div>
+      </div>
+    </section>
+
+@endsection

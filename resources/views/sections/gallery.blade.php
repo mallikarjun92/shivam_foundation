@@ -1,3 +1,4 @@
+{{-- @if(isset($gallery) && count($gallery) > 0)
 <section class="ftco-gallery">
     <div class="d-md-flex">
         @foreach(array_slice($gallery, 0, 4) as $image)
@@ -18,3 +19,24 @@
         @endforeach
     </div>
 </section>
+@endif --}}
+
+@if(isset($gallery) && count($gallery) > 0)
+<section class="ftco-section bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="carousel-cause owl-carousel">
+                    @foreach($gallery as $image)
+                    <div class="item">
+                        <div class="cause-entry">
+                            <a  class="img" style="background-image: url({{ asset($image) }});"></a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif

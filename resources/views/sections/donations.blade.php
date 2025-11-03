@@ -4,7 +4,7 @@
         <div class="row justify-content-center mb-5 pb-3">
             <div class="col-md-7 heading-section ftco-animate text-center">
                 <h2 class="mb-4">Latest Donations</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                {{-- <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p> --}}
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,9 @@
                             <h3><a href="#">{{ $donation['name'] }}</a></h3>
                             <span class="position">{{ $donation['time'] }}</span>
                             <div class="text">
-                                <p>Donated <span>${{ number_format($donation['amount']) }}</span> for <a href="#">{{ $donation['cause'] }}</a></p>
+                                <p>Donated <span>Rs. {{ number_format($donation['amount']) }}</span> 
+                                {{-- for <a href="#">{{ $donation['cause'] }}</a> --}}
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-3 text-center">
                 <img src="{{ $volunteer->photo_url }}" alt="{{ $volunteer->full_name }}" 
-                     class="img-fluid rounded-circle mb-3" style="max-width: 200px;">
+                     class="img-fluid mb-3" style="max-width: 200px;">
             </div>
             <div class="col-md-9">
                 <div class="row">

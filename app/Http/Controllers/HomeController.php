@@ -87,29 +87,45 @@ class HomeController extends Controller
         ];
 
         // Donations data
-        $donations = [
-            [
-                'image' => 'images/person_1.jpg',
-                'name' => 'Ivan Jacobson',
-                'time' => 'Donated Just now',
-                'amount' => 300,
-                'cause' => 'Children Needs Food'
-            ],
-            [
-                'image' => 'images/person_2.jpg',
-                'name' => 'Ivan Jacobson',
-                'time' => 'Donated Just now',
-                'amount' => 150,
-                'cause' => 'Children Needs Food'
-            ],
-            [
-                'image' => 'images/person_3.jpg',
-                'name' => 'Ivan Jacobson',
-                'time' => 'Donated Just now',
-                'amount' => 250,
-                'cause' => 'Children Needs Food'
-            ]
-        ];
+        // $donations = [
+        //     [
+        //         'image' => 'images/person_1.jpg',
+        //         'name' => 'Ivan Jacobson',
+        //         'time' => 'Donated Just now',
+        //         'amount' => 300,
+        //         'cause' => 'Children Needs Food'
+        //     ],
+        //     [
+        //         'image' => 'images/person_2.jpg',
+        //         'name' => 'Ivan Jacobson',
+        //         'time' => 'Donated Just now',
+        //         'amount' => 150,
+        //         'cause' => 'Children Needs Food'
+        //     ],
+        //     [
+        //         'image' => 'images/person_3.jpg',
+        //         'name' => 'Ivan Jacobson',
+        //         'time' => 'Donated Just now',
+        //         'amount' => 250,
+        //         'cause' => 'Children Needs Food'
+        //     ]
+        // ];
+
+        $featuredDonors = \App\Models\FeaturedDonor::where('published', true)
+                    ->latest()
+                    ->take(10)
+                    ->get();
+
+        $donations = [];
+        foreach ($featuredDonors as $donor) {
+            $donations[] = [
+                'image' => $donor->image ? asset('storage/' . $donor->image) : asset('images/default_donor.jpg'),
+                'name' => $donor->name,
+                'time' => $donor->donated_at ? 'Donated on ' . $donor->donated_at->format('M d, Y') : 'Donation date not available',
+                'amount' => $donor->amount ?? 0,
+                'cause' => 'General Donation' // You can modify this if you have specific causes
+            ];
+        }
 
         // fetch the gallery images from the database
         $galleryFromDB = \App\Models\Gallery::latest()->take(8)->get();
@@ -157,6 +173,7 @@ class HomeController extends Controller
 
         foreach ($eventsData as $event) {
             $events[] = [
+                'id' => $event->id,
                 'image' => $event->image ? 'storage/'.$event->image : asset('images/default_event_image.jpg'),
                 'date' => $event->event_date->format('M d, Y'),
                 'organizer' => $event->organizer,

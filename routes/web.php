@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\HeroContentController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\MaintenanceController;
+use App\Http\Controllers\Admin\FeaturedDonorController;
 
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -54,8 +55,8 @@ Route::post('/donate/update-transaction/{id}', [DonationController::class, 'upda
 Route::get('/gallery', [App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 
 // Frontend events routes
-Route::get('/events', [EventController::class, 'frontendIndex'])->name('events.index');
-Route::get('/events/{slug}', [EventController::class, 'frontendShow'])->name('events.show');
+// Route::get('/events', [EventController::class, 'frontendIndex'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'showEvent'])->name('events.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -87,6 +88,9 @@ Route::middleware(['auth', 'role:admin'])
 
         // Events resource
         Route::resource('events', EventController::class);
+
+        // Featured Donors resource
+        Route::resource('donors', FeaturedDonorController::class);
 
         // Contact messages
         Route::get('contacts', [ContactController::class, 'listMessages'])->name('contacts.index');

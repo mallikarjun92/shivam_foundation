@@ -117,4 +117,10 @@ class EventController extends Controller
         return redirect()->route('admin.events.index')
             ->with('success', 'Event deleted successfully.');
     }
+
+    public function showEvent(Request $request, Event $event)
+    {
+        // $event = Event::where('slug', $id)->firstOrFail();
+        return view('events.show', compact('event'));
+    }
 }

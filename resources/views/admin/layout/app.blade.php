@@ -111,6 +111,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.donors.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.donors.index') }}">
+                                <i class="bi bi-image"></i> Featured Donors
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.maintenance.*') ? 'active' : '' }}" 
                             href="{{ route('admin.maintenance.index') }}">
                                 <i class="bi bi-wrench"></i> Maintenance

@@ -11,6 +11,19 @@ class DashboardController extends Controller
     public function index()
     {
         // dd("13");
-        return view('admin.dashboard');
+        //fetch count of blogs, events, volunteers, donations
+        $blogCount = \App\Models\Blog::count();
+        $eventCount = \App\Models\Event::count();
+        $volunteerCount = \App\Models\Volunteer::count();
+        $donationCount = \App\Models\Donation::count();
+
+        $stats = [
+            'blogs' => $blogCount,
+            'events' => $eventCount,
+            'volunteers' => $volunteerCount,
+            'donations' => $donationCount,
+        ];
+
+        return view('admin.dashboard', compact('stats'));
     }
 }

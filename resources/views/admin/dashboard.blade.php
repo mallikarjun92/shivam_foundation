@@ -78,8 +78,8 @@
                     </div>
                     <div class="col">
                         <div class="numbers">
-                            <p class="card-category mb-0 opacity-75">Total Causes</p>
-                            <h4 class="card-title mb-0">{{ $stats['causes'] ?? 0 }}</h4>
+                            <p class="card-category mb-0 opacity-75">Total Donations</p>
+                            <h4 class="card-title mb-0">{{ $stats['donations'] ?? 0 }}</h4>
                         </div>
                     </div>
                 </div>

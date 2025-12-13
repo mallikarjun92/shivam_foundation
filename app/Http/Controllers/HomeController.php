@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Gallery;
 
 class HomeController extends Controller
 {
@@ -86,46 +88,21 @@ class HomeController extends Controller
             ]
         ];
 
-        // Donations data
-        // $donations = [
-        //     [
-        //         'image' => 'images/person_1.jpg',
-        //         'name' => 'Ivan Jacobson',
-        //         'time' => 'Donated Just now',
-        //         'amount' => 300,
-        //         'cause' => 'Children Needs Food'
-        //     ],
-        //     [
-        //         'image' => 'images/person_2.jpg',
-        //         'name' => 'Ivan Jacobson',
-        //         'time' => 'Donated Just now',
-        //         'amount' => 150,
-        //         'cause' => 'Children Needs Food'
-        //     ],
-        //     [
-        //         'image' => 'images/person_3.jpg',
-        //         'name' => 'Ivan Jacobson',
-        //         'time' => 'Donated Just now',
-        //         'amount' => 250,
-        //         'cause' => 'Children Needs Food'
-        //     ]
-        // ];
-
-        $featuredDonors = \App\Models\FeaturedDonor::where('published', true)
-                    ->latest()
-                    ->take(10)
-                    ->get();
-
-        $donations = [];
-        foreach ($featuredDonors as $donor) {
-            $donations[] = [
-                'image' => $donor->image ? asset('storage/' . $donor->image) : asset('images/default_donor.jpg'),
-                'name' => $donor->name,
-                'time' => $donor->donated_at ? 'Donated on ' . $donor->donated_at->format('M d, Y') : 'Donation date not available',
-                'amount' => $donor->amount ?? 0,
-                'cause' => 'General Donation' // You can modify this if you have specific causes
-            ];
-        }
+        $donations = \App\Models\Donation::where('status', 'completed')
+                ->latest()
+                ->take(10)
+                ->get()
+                ->map(function ($donor) {
+                    return [
+                        'image' => $donor->donor_image 
+                                    ? Storage::url($donor->donor_image) 
+                                    : asset('images/default-donor.jpg'),
+                        'name' => $donor->name,
+                        'time' => 'Donated on ' . $donor->created_at->format('M d, Y'),
+                        'amount' => $donor->amount ?? 0,
+                        'cause' => 'General Donation',
+                    ];
+                });
 
         // fetch the gallery images from the database
         $galleryFromDB = \App\Models\Gallery::latest()->take(8)->get();
@@ -152,11 +129,32 @@ class HomeController extends Controller
         }
 
         // fetch the blogs from the database
-        $blogsFromDB = \App\Models\Blog::latest()->take(3)->get();
+        $blogsFromDB = \App\Models\Blog::latest()->where('published', true)->take(3)->get();
 
         $blogs = [];
         foreach ($blogsFromDB as $blog) {
             $blogs[] = [
+                'image' => $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('images/default_blog_image.jpg'),
+                'date' => $blog->created_at->format('M d, Y'),
+                'author' => $blog->author,
+                'comments' => $blog->comments_count ?? 0,
+                'title' => $blog->title,
+                'excerpt' => \Illuminate\Support\Str::limit($blog->content, 100),
+                'slug' => $blog->slug,
+                'link' => route('blog.showBlogDetail', $blog->slug)
+            ];
+        }
+
+        // fetch blogs with success tags e.g. tags like 'success'
+        $successTagBlogs = \App\Models\Blog::where('tags', 'like', '%success%')
+                                ->where('published', true)
+                                ->latest()
+                                ->take(3)
+                                ->get();
+        
+        $successBlogs = [];
+        foreach ($successTagBlogs as $blog) {
+            $successBlogs[] = [
                 'image' => $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('images/default_blog_image.jpg'),
                 'date' => $blog->created_at->format('M d, Y'),
                 'author' => $blog->author,
@@ -188,40 +186,6 @@ class HomeController extends Controller
             ];
         }
 
-        // Events data
-        // $events = [
-        //     [
-        //         'image' => 'images/event-1.jpg',
-        //         'date' => 'Sep. 10, 2018',
-        //         'organizer' => 'Admin',
-        //         'comments' => 3,
-        //         'title' => 'World Wide Donation',
-        //         'time' => '10:30AM-03:30PM',
-        //         'venue' => 'Venue Main Campus',
-        //         'description' => 'A small river named Duden flows by their place and supplies it with the necessary regelialia.'
-        //     ],
-        //     [
-        //         'image' => 'images/event-2.jpg',
-        //         'date' => 'Sep. 10, 2018',
-        //         'organizer' => 'Admin',
-        //         'comments' => 3,
-        //         'title' => 'World Wide Donation',
-        //         'time' => '10:30AM-03:30PM',
-        //         'venue' => 'Venue Main Campus',
-        //         'description' => 'A small river named Duden flows by their place and supplies it with the necessary regelialia.'
-        //     ],
-        //     [
-        //         'image' => 'images/event-3.jpg',
-        //         'date' => 'Sep. 10, 2018',
-        //         'organizer' => 'Admin',
-        //         'comments' => 3,
-        //         'title' => 'World Wide Donation',
-        //         'time' => '10:30AM-03:30PM',
-        //         'venue' => 'Venue Main Campus',
-        //         'description' => 'A small river named Duden flows by their place and supplies it with the necessary regelialia.'
-        //     ]
-        // ];
-
         // Recent blogs for footer
         $recentBlogs = $blogs; // Using the same blogs fetched from the database
 
@@ -234,7 +198,8 @@ class HomeController extends Controller
             'blogs', 
             'events',
             'recentBlogs',
-            // 'heroContent'
+            // 'heroContent',
+            'successBlogs'
         ));
     }
 }

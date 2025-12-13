@@ -45,4 +45,10 @@
             @endforeach
         </div>
     </div>
+    
+    <div class="view-more mt-4">
+        <div class="text-center">
+            <a href="{{ route('volunteers.index') }}" class="btn btn-primary btn-lg">View All Volunteers</a>
+        </div>
+    </div>
 </section>

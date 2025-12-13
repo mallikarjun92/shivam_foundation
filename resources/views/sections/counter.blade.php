@@ -1,15 +1,29 @@
 @if(!isset($stats))
     @php
+        // $stats = [
+        //     'children_served' => 1500,
+        //     'locations' => 'India',
+        // ];
+
+        $statistic = \App\Models\Statistic::first();
+        // dd($stats);
         $stats = [
-            'children_served' => 1500,
-            'locations' => 'India',
+            'children_served' => $statistic->children_served ?? 0,
+            'locations' => $statistic->country_list[0] ?? 'India',
         ];
     @endphp
 @endif
 @php
+    // $stats = [
+    //     'children_served' => 150000,
+    //     'locations' => 'India',
+    // ];
+    
+    $statistic = \App\Models\Statistic::first();
+    // dd($stats);
     $stats = [
-        'children_served' => 150000,
-        'locations' => 'India',
+        'children_served' => $statistic->children_served ?? 0,
+        'locations' => $statistic->country_list[0] ?? 'India',
     ];
 @endphp
 {{-- @if(isset($stats)) --}}

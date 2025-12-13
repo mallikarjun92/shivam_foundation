@@ -7,9 +7,11 @@
                     <h2 class="ftco-heading-2">About Us</h2>
                     <p>At Vishvam Foundation, we believe no child should miss out on learning or growth due to hunger or lack of support. Our programs bring hope and opportunity to the community.</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                        {{-- <li class="ftco-animate"><a href="https://wa.me/917892284158" target="_blank"><span class="icon-whatsapp"></span></a></li> --}}
+                        <li class="ftco-animate"><a href="https://wa.me/+918748980053" target="_blank"><span class="icon-whatsapp"></span></a></li>
+                        {{-- <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li> --}}
+                        <li class="ftco-animate"><a href="https://www.instagram.com/vishvamfoundation?igsh=MW9naGxmN3YxN29idw==" target="_blank"><span class="icon-instagram"></span></a></li>
+                        <li class="ftco-animate"><a href="mailto:info@vishvamfoundation.org"><span class="icon-envelope"></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -50,8 +52,9 @@
                     <div class="block-23 mb-3">
                         <ul>
                             <li><span class="icon icon-map-marker"></span><span class="text">#13, Siddeshwara complex, behind Indian bank, near AVK college road, Hassan, Karnataka 573201</span></li>
-                            <li><a href="#"><span class="icon icon-phone"></span><span class="text">+91 78922 84158</span></a></li>
-                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@vishvamfoundation.org</span></a></li>
+                            <li><a href="tell:+917892284158"><span class="icon icon-phone"></span><span class="text">+91 78922 84158</span></a></li>
+                            <li><a href="https://wa.me/+918748980053" target="_blank"><span class="icon icon-whatsapp"></span><span class="text">+91 87489 80053</span></a></li>
+                            <li><a href="mailto:info@vishvamfoundation.org"><span class="icon icon-envelope"></span><span class="text">info@vishvamfoundation.org</span></a></li>
                         </ul>
                     </div>
                 </div>

@@ -21,12 +21,14 @@ class Blog extends Model
         'featured_image',
         'published',
         'published_at',
-        'user_id'
+        'user_id',
+        'images'
     ];
 
     protected $casts = [
         'published' => 'boolean',
         'published_at' => 'datetime',
+        'images' => 'array'
     ];
 
     protected static function boot()

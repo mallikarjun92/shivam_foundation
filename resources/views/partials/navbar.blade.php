@@ -15,7 +15,9 @@
           {{-- <li class="nav-item {{ request()->is('donate*') ? 'active' : '' }}"><a href="{{ url('donate') }}" class="nav-link">Donate</a></li> --}}
           <li class="nav-item {{ request()->is('blog') ? 'active' : '' }}"><a href="{{ url('blog') }}" class="nav-link">Blog</a></li>
           <li class="nav-item {{ request()->is('gallery') ? 'active' : '' }}"><a href="{{ url('gallery') }}" class="nav-link">Gallery</a></li>
-          {{-- <li class="nav-item {{ request()->is('event') ? 'active' : '' }}"><a href="{{ url('event') }}" class="nav-link">Events</a></li> --}}
+          <li class="nav-item {{ request()->is('events') ? 'active' : '' }}"><a href="{{ url('events') }}" class="nav-link">Events</a></li>
+          <li class="nav-item {{ request()->is('programs') ? 'active' : '' }}"><a href="{{ url('programs') }}" class="nav-link">Programs</a></li>
+          <li class="nav-item {{ request()->is('csr') ? 'active' : '' }}"><a href="{{ url('csr') }}" class="nav-link">Partnership</a></li>
           <li class="nav-item {{ request()->is('contact') ? 'active' : '' }}"><a href="{{ url('contact') }}" class="nav-link">Contact</a></li>
           <li class="nav-item {{ request()->is('donate*') ? 'active' : '' }}"><a href="{{ url('donate') }}" class="nav-link" style="background-color: #f8b739; color: #000; border-radius: 4px; padding: 8px 20px; margin-left: 10px;">Donate</a></li>
         </ul>

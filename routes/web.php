@@ -18,21 +18,6 @@ use App\Http\Controllers\Admin\FeaturedDonorController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::get('/storage/{filename}', function ($filename) {
-//     $paths = [
-//         storage_path('app/public/' . $filename),   // main Laravel storage
-//         public_path('storage/' . $filename),       // fallback public/storage
-//     ];
-
-//     foreach ($paths as $path) {
-//         if (file_exists($path)) {
-//             return response()->file($path);
-//         }
-//     }
-
-//     abort(404, 'File not found');
-// });
-
 Route::prefix('blog')->group(function () {
     Route::get('/', [BlogController::class, 'listBlogs'])->name('blog.index');
     Route::get('/{slug}', [BlogController::class, 'showBlogDetail'])->name('blog.showBlogDetail');
@@ -56,7 +41,21 @@ Route::get('/gallery', [App\Http\Controllers\GalleryController::class, 'index'])
 
 // Frontend events routes
 // Route::get('/events', [EventController::class, 'frontendIndex'])->name('events.index');
+Route::get('/events', [EventController::class, 'listEvents'])->name('events.list');
 Route::get('/events/{event}', [EventController::class, 'showEvent'])->name('events.show');
+
+// volunteers routes
+Route::get('/about-us/volunteers', [App\Http\Controllers\VolunteerController::class, 'index'])->name('volunteers.index');
+Route::get('/volunteers/{id}', [App\Http\Controllers\VolunteerController::class, 'show'])->name('volunteers.show');
+
+// Programs routes
+Route::get('/programs', [App\Http\Controllers\ProgramsController::class, 'allprograms'])->name('programs.index');
+Route::get('/programs/yoga', [App\Http\Controllers\ProgramsController::class, 'yoga'])->name('programs.yoga');
+Route::post('/programs/enroll', [App\Http\Controllers\ProgramsController::class, 'enrollProgram'])->name('programs.enroll');
+Route::get('/programs/ramayana', [App\Http\Controllers\ProgramsController::class, 'ramayana'])->name('programs.ramayana');
+
+// CSR fund page
+Route::get('/csr', [App\Http\Controllers\CSRController::class, 'index'])->name('csr.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -76,6 +75,8 @@ Route::middleware(['auth', 'role:admin'])
         
         // Blogs resource
         Route::resource('blogs', BlogController::class);
+        // Blog image upload for CKEditor
+        Route::post('blogs/upload-image', [\App\Http\Controllers\Admin\BlogController::class, 'uploadImage'])->name('blogs.upload-image');
 
         // Volunteers resource
         Route::resource('volunteers', App\Http\Controllers\Admin\VolunteerController::class);
@@ -92,13 +93,23 @@ Route::middleware(['auth', 'role:admin'])
         // Featured Donors resource
         Route::resource('donors', FeaturedDonorController::class);
 
+        // programs enrollment management
+        Route::resource('programs-enrollments', App\Http\Controllers\Admin\ProgramsEnrollmentController::class);
+
+        Route::resource('statistics', App\Http\Controllers\Admin\StatisticController::class);
+
         // Contact messages
         Route::get('contacts', [ContactController::class, 'listMessages'])->name('contacts.index');
         Route::get('contacts/{id}', [ContactController::class, 'showMessage'])->name('contacts.show');
+        Route::delete('contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.delete');
 
         // Donations management
         Route::get('donations', [DonationController::class, 'adminIndex'])->name('donations.index');
         Route::get('donations/{id}', [DonationController::class, 'adminShow'])->name('donations.show');
+        // Route::get('donations/edit/{id}', [DonationController::class, 'edit'])->name('donations.edit');
+        // Route::put('/admin/donations/{id}', [DonationController::class, 'update'])->name('admin.donations.update');
+        Route::get('donations/{id}/edit', [DonationController::class, 'edit'])->name('donations.edit');
+        Route::put('donations/{id}', [DonationController::class, 'update'])->name('donations.update');
 
         // Maintenance routes
         Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');

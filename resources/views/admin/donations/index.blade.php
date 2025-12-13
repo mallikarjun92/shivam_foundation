@@ -45,6 +45,9 @@
                                 <a href="{{ route('admin.donations.show', $donation->id) }}" class="btn btn-sm btn-info">
                                     <i class="bi bi-eye"></i> View
                                 </a>
+                                <a href="{{ route('admin.donations.edit', $donation->id) }}" class="btn btn-sm btn-warning ms-1">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -52,7 +55,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-4">
-                {{ $donations->links() }}
+                {{ $donations->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

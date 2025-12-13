@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Donation;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class DonationController extends Controller
 {
@@ -97,6 +98,61 @@ class DonationController extends Controller
     {
         $donation = Donation::findOrFail($id);
         return view('admin.donations.show', compact('donation'));
+    }
+
+    public function edit($id)
+    {
+        $donation = Donation::findOrFail($id);
+        return view('admin.donations.edit', compact('donation'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $donation = Donation::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'pan' => 'nullable|string|max:10|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
+            'pincode' => 'nullable|string|max:6',
+            // 'amount' => 'required|numeric|min:1',
+            'status' => 'required|in:pending,completed',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,avif|max:2048',
+            'donor_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,avif|max:2048',
+        ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+
+            // remove old image
+            if ($donation->image && Storage::exists($donation->image)) {
+                Storage::delete($donation->image);
+            }
+
+            $path = $request->file('image')
+                            ->store('donations', 'public');
+
+            $donation->image = $path;
+        }
+
+        if ($request->hasFile('donor_image')) {
+
+            // delete old donor image
+            if ($donation->donor_image && Storage::exists('public/' . $donation->donor_image)) {
+                Storage::delete('public/' . $donation->donor_image);
+            }
+
+            $donorImagePath = $request->file('donor_image')->store('donors', 'public');
+            $donation->donor_image = $donorImagePath;
+        }
+
+        // Update all fillable fields
+        $donation->update($request->except(['image', 'donor_image']));
+
+        return redirect()
+            ->route('admin.donations.index')
+            ->with('success', 'Donation updated successfully!');
     }
 
 }

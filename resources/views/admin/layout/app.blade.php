@@ -17,12 +17,65 @@
         .sidebar {
             min-height: 100vh;
             background: #343a40;
+            height: 100% !important;
+            overflow-y: auto;
+            position: fixed;
+
+            /* Hide scrollbar – Firefox */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        /* Hide scrollbar – Chrome, Edge, Safari */
+        .sidebar::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        /* Hide scrollbar by default */
+        .sidebar::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Show scrollbar on hover */
+        .sidebar:hover::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Scrollbar track */
+        .sidebar::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        /* Scrollbar thumb */
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 8px;
+            border: 2px solid #1e1e1e;
+        }
+
+        /* Hover effect for thumb */
+        .sidebar:hover::-webkit-scrollbar-thumb {
+            background: #777;
+        }
+
+        /* Firefox support */
+        .sidebar {
+            scrollbar-width: none; /* hidden by default */
+        }
+
+        .sidebar:hover {
+            scrollbar-width: thin;               
+            scrollbar-color: #555 #1e1e1e;
         }
         .sidebar .nav-link {
             color: #adb5bd;
             padding: 0.75rem 1rem;
             margin: 0.125rem 0;
             border-radius: 0.375rem;
+        }
+        .sidebar .badge {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 8px;
         }
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
@@ -49,7 +102,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse position-fixed" id="sidebar">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse position-fixed" id="sidebar" style="width: fit-content;">
                 <div class="position-sticky pt-3">
                     <div class="px-3 pb-2 mb-3 border-bottom">
                         <h5 class="text-white">Admin Panel</h5>
@@ -92,12 +145,20 @@
                                 <i class="bi bi-images"></i> Gallery
                             </a>
                         </li>
+                        
+                        @php
+                            $unreadCount = \App\Models\Contact::where('is_new', true)->count();
+                        @endphp
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}" 
                                href="{{ route('admin.contacts.index') }}">
                                 <i class="bi bi-envelope"></i> Contact Messages
+                                @if($unreadCount > 0)
+                                    <span class="badge bg-danger">{{ $unreadCount }}</span>
+                                @endif
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.donations.*') ? 'active' : '' }}" 
                                href="{{ route('admin.donations.index') }}">
@@ -110,10 +171,29 @@
                                 <i class="bi bi-image"></i> Hero Content
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.donors.*') ? 'active' : '' }}" 
                                href="{{ route('admin.donors.index') }}">
                                 <i class="bi bi-image"></i> Featured Donors
+                            </a>
+                        </li> --}}
+
+                        @php
+                            $newEnrollmentsCount = \App\Models\ProgramsEnrollment::where('is_new', true)->count();
+                        @endphp
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.programs-enrollments.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.programs-enrollments.index') }}">
+                                <i class="bi bi-people"></i> Program Enrollments
+                                @if($newEnrollmentsCount > 0)
+                                    <span class="badge bg-danger">{{ $newEnrollmentsCount }}</span>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.statistics.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.statistics.index') }}">
+                                <i class="bi bi-people"></i> Statistics
                             </a>
                         </li>
                         <li class="nav-item">
@@ -159,6 +239,8 @@
         </div>
     </div>
 
+    {{-- jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- CKEditor CDN -->

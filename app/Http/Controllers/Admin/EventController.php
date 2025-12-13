@@ -28,7 +28,7 @@ class EventController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
             'event_date' => 'required|date',
             'location' => 'required|string|max:255',
             'organizer' => 'nullable|string|max:255',
@@ -72,7 +72,7 @@ class EventController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
             'event_date' => 'required|date',
             'location' => 'required|string|max:255',
             'organizer' => 'nullable|string|max:255',
@@ -116,6 +116,38 @@ class EventController extends Controller
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Event deleted successfully.');
+    }
+
+    public function listEvents(Request $request)
+    {
+        // 1. Fetch published events
+        $eventsQuery = Event::published()->latest('event_date');
+
+        // 2. Paginate raw Eloquent results
+        $paginated = $eventsQuery->paginate(9); // 9 cards per page
+
+        // 3. Transform events into array format for card rendering
+        $events = $paginated->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'title' => $event->title,
+                'excerpt' => $event->excerpt,
+                'description' => Str::limit($event->description, 120),
+                'image' => $event->image_url,                      // uses accessor
+                'date' => $event->formatted_date,                 // "Jan 5, 2025"
+                'time' => $event->formatted_time,                 // "5:30 PM"
+                'venue' => $event->location,
+                'organizer' => $event->organizer ?? 'Vishvam Foundation',
+                'link' => route('events.show', $event->id),
+            ];
+        });
+
+        // 4. Replace the paginator items with transformed array
+        $paginated->setCollection(collect($events));
+
+        return view('events.index', [
+            'events' => $paginated
+        ]);
     }
 
     public function showEvent(Request $request, Event $event)

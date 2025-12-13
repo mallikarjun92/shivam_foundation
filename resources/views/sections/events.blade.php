@@ -9,7 +9,7 @@
         <div class="row">
             @foreach($events as $event)
             <div class="col-md-4 d-flex ftco-animate">
-                <div class="blog-entry align-self-stretch">
+                <div class="blog-entry align-self-stretch w-100">
                     <a href="#" class="block-20" style="background-image: url('{{ asset($event['image']) }}');"></a>
                     <div class="text p-4 d-block">
                         <div class="meta mb-3">

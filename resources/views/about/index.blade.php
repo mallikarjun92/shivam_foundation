@@ -74,6 +74,10 @@
       </div>
     </section>
 
+    @include('sections.mission', ['mission' => $aboutData['mission']])
+
+    @include('sections.vision', ['vision' => $aboutData['vision']])
+
     @include('sections.volunteer')
 
     @include('sections.volunteers', ['volunteers' => $volunteers])

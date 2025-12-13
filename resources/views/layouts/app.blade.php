@@ -36,6 +36,8 @@
 
     @yield('content')
 
+    @include('partials.floating-social')
+
     @include('partials.footer')
 
     <!-- loader -->

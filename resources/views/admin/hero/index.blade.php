@@ -7,9 +7,11 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Hero Content</h5>
-        <a href="{{ route('admin.hero.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add New Hero Content
-        </a>
+        @if($heroContents->isEmpty())
+            <a href="{{ route('admin.hero.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add New Hero Content
+            </a>            
+        @endif
     </div>
     <div class="card-body">
         @if($heroContents->isEmpty())
@@ -72,14 +74,14 @@
                                     <a href="{{ route('admin.hero.edit', $hero) }}" class="btn btn-sm btn-primary">
                                         <i class="bi bi-pencil"></i> Edit
                                     </a>
-                                    <form action="{{ route('admin.hero.destroy', $hero) }}" method="POST" class="d-inline">
+                                    {{-- <form action="{{ route('admin.hero.destroy', $hero) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" 
                                             onclick="return confirm('Are you sure you want to delete this hero content?')">
                                             <i class="bi bi-trash"></i> Delete
                                         </button>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>
@@ -88,7 +90,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-4">
-                {{ $heroContents->links() }}
+                {{ $heroContents->links('pagination::bootstrap-5') }}
             </div>
         @endif
     </div>

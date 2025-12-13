@@ -34,9 +34,10 @@ class VolunteerController extends Controller
             'zip_code' => 'nullable|string|max:10',
             'skills' => 'nullable|string',
             'interests' => 'nullable|string',
+            'introduction' => 'nullable|string',
             'availability' => 'nullable|string|max:255',
             'previous_experience' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Photo validation
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:2048', // Photo validation
             'active' => 'boolean'
         ]);
 
@@ -83,7 +84,7 @@ class VolunteerController extends Controller
             'interests' => 'nullable|string',
             'availability' => 'nullable|string|max:255',
             'previous_experience' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Photo validation
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:2048', // Photo validation
             'active' => 'boolean'
         ]);
 

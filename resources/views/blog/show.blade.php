@@ -2,6 +2,78 @@
 
 @section('title', $blog['title'] . ' - Vishwam Foundation')
 
+@push('styles')
+<style>
+/* Modal */
+.gallery-modal {
+    display:none;
+    position:fixed;
+    z-index:99999;
+    padding-top:80px;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    overflow:auto;
+    background:rgba(0,0,0,0.9);
+}
+
+.gallery-modal-content {
+    margin:auto;
+    display:block;
+    width:80%;
+    max-width:900px;
+    border-radius:10px;
+}
+
+.gallery-close {
+    position:absolute;
+    top:20px;
+    right:35px;
+    color:#fff;
+    font-size:40px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.gallery-prev,
+.gallery-next {
+    cursor:pointer;
+    position:absolute;
+    top:50%;
+    padding:16px;
+    color:white;
+    font-size:40px;
+    font-weight:bold;
+    user-select:none;
+}
+
+.gallery-prev { left:10px; }
+.gallery-next { right:10px; }
+
+.gallery-prev:hover,
+.gallery-next:hover,
+.gallery-close:hover {
+    color:#ccc;
+}
+
+.gallery-caption {
+    text-align:center;
+    color:#ccc;
+    margin-top:10px;
+    font-size:16px;
+}
+.gallery-image {
+  width: auto;
+  height: 100%;
+}
+.image img {
+  max-width: 100%;
+  width: fit-content;
+}
+</style>
+@endpush
+
 @section('content')
     
     <div class="hero-wrap" style="background-image: url('{{ asset('images/bg_2.jpg') }}');" data-stellar-background-ratio="0.5">
@@ -32,6 +104,26 @@
             </p>
             
             {!! $blog['content'] !!}
+
+            <hr>
+            {{-- show the images below --}}
+            {{-- Blog Images Gallery --}}
+            @if(!empty($blog['images']) && is_array($blog['images']))
+                {{-- <h3 class="mt-5 mb-3">Gallery</h3> --}}
+
+                <div class="row blog-gallery">
+                    @foreach($blog['images'] as $index => $img)
+                        <div class="col-md-4 mb-3">
+                            <img 
+                                src="{{ asset('storage/'.$img) }}" 
+                                class="img-fluid gallery-image"
+                                data-index="{{ $index }}"
+                                style="cursor:pointer; border-radius:8px; object-fit:cover;"
+                            >
+                        </div>
+                    @endforeach
+                </div>
+            @endif
             
             <div class="about-author d-flex p-4 bg-light">
               <div class="bio mr-5" style="width: 50px; height: auto;">
@@ -160,6 +252,80 @@
           </div><!-- END COL -->
         </div>
       </div>
+
+      <!-- Gallery Modal -->
+      {{-- GALLERY MODAL --}}
+      <div id="galleryModal" class="gallery-modal">
+          <span class="gallery-close">&times;</span>
+          <img class="gallery-modal-content" id="galleryModalImg">
+          <div class="gallery-caption" id="galleryCaption"></div>
+
+          <a class="gallery-prev">&#10094;</a>
+          <a class="gallery-next">&#10095;</a>
+      </div>
+      {{-- END OF GALLERY MODAL --}}
+
     </section>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const images = document.querySelectorAll('.gallery-image');
+    const modal = document.getElementById('galleryModal');
+    const modalImg = document.getElementById('galleryModalImg');
+    const captionText = document.getElementById('galleryCaption');
+    const closeBtn = document.querySelector('.gallery-close');
+    const prevBtn = document.querySelector('.gallery-prev');
+    const nextBtn = document.querySelector('.gallery-next');
+
+    let currentIndex = 0;
+
+    function openModal(index) {
+        currentIndex = index;
+        modal.style.display = "block";
+        modalImg.src = images[index].src;
+        captionText.innerHTML = "Image " + (index + 1) + " of " + images.length;
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % images.length;
+        openModal(currentIndex);
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        openModal(currentIndex);
+    }
+
+    images.forEach((img, index) => {
+        img.addEventListener('click', () => openModal(index));
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+
+    // Close when clicking outside image
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (modal.style.display === "block") {
+            if (e.key === "ArrowRight") showNext();
+            if (e.key === "ArrowLeft") showPrev();
+            if (e.key === "Escape") closeModal();
+        }
+    });
+
+});
+</script>
+@endpush

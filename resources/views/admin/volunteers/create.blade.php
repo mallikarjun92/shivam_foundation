@@ -114,6 +114,15 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label for="introduction" class="form-label">Introduction</label>
+                <textarea class="form-control @error('introduction') is-invalid @enderror" 
+                          id="introduction" name="introduction" rows="2">{{ old('introduction') }}</textarea>
+                @error('introduction')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             
             <div class="mb-3">
                 <label for="availability" class="form-label">Availability</label>

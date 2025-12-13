@@ -20,7 +20,14 @@ class BlogController extends Controller
 
     public function create()
     {
-        return view('admin.blogs.create');
+        $existingTags = Blog::pluck('tags')
+            ->filter()
+            ->flatMap(fn($tags) => explode(',', $tags))
+            ->map(fn($tag) => trim($tag))
+            ->unique()
+            ->values();
+
+        return view('admin.blogs.create', compact('existingTags'));
     }
 
     public function store(Request $request)
@@ -31,13 +38,24 @@ class BlogController extends Controller
             'content' => 'required|string',
             'author' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'published' => 'boolean'
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp,*|max:2048',
+            'published' => 'boolean',
+            'tags' => 'nullable|string|max:255'
         ]);
 
         if ($request->hasFile('featured_image')) {
             $imagePath = $request->file('featured_image')->store('blogs', 'public');
             $validated['featured_image'] = $imagePath;
+        }
+
+        // Handle multiple images
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('blogs', 'public');
+                $imagePaths[] = $path;
+            }
+            $validated['images'] = $imagePaths;
         }
 
         $validated['user_id'] = auth()->id();
@@ -57,7 +75,14 @@ class BlogController extends Controller
 
     public function edit(Blog $blog)
     {
-        return view('admin.blogs.edit', compact('blog'));
+        $existingTags = Blog::pluck('tags')
+            ->filter()
+            ->flatMap(fn($tags) => explode(',', $tags))
+            ->map(fn($tag) => trim($tag))
+            ->unique()
+            ->values();
+
+        return view('admin.blogs.edit', compact('blog', 'existingTags'));
     }
 
     public function update(Request $request, Blog $blog)
@@ -66,8 +91,9 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'excerpt' => 'nullable|string|max:500',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'published' => 'boolean'
+            'featured_image' => 'nullable|mimes:jpeg,png,jpg,gif,avif,webp,*|max:2048',
+            'published' => 'boolean',
+            'tags' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('featured_image')) {
@@ -80,8 +106,39 @@ class BlogController extends Controller
             $validated['featured_image'] = $imagePath;
         }
 
+        // 1. Handle deletion of selected old images
+        $existingImages = $blog->images ?? [];
+        $deleteImages = $request->delete_images ?? [];
+
+        $keptImages = [];
+
+        foreach ($existingImages as $index => $imgPath) {
+
+            // If marked for deletion
+            if (isset($deleteImages[$index]) && $deleteImages[$index] == "1") {
+                Storage::disk('public')->delete($imgPath);
+            } else {
+                // keep image
+                $keptImages[] = $imgPath;
+            }
+        }
+
+        // Handle multiple images upload
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('blogs', 'public');
+                $keptImages[] = $path;
+            }
+        }
+
+        // Finally set images JSON
+        $validated['images'] = $keptImages;
+
+
         $validated['slug'] = Str::slug($request->title);
         $validated['published_at'] = $request->published ? now() : null;
+        $validated['tags'] = $request->tags;
 
         $blog->update($validated);
 
@@ -96,49 +153,39 @@ class BlogController extends Controller
             Storage::disk('public')->delete($blog->featured_image);
         }
 
+        if ($blog->images && is_array($blog->images)) {
+            foreach ($blog->images as $img) {
+                Storage::disk('public')->delete($img);
+            }
+        }
+
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')
             ->with('success', 'Blog deleted successfully.');
     }
 
-    public function listBlogs(Request $request, $page = 1)
+    public function listBlogs(Request $request)
     {
-        $blogPosts = Blog::where('published', true)->latest()->paginate(5, ['*'], 'page', $page);
+        // Show 6 blogs per page
+        $blogs = Blog::where('published', true)
+                    ->latest()
+                    ->paginate(6);
 
-        $allBlogs = [];
-        foreach ($blogPosts as $post) {
-            $allBlogs[] = [
+        // Transform for frontend
+        $blogs->getCollection()->transform(function($post) {
+            return [
                 'title' => $post->title,
                 'excerpt' => $post->excerpt,
-                'image' => $post->featured_image ? asset('storage/' . $post->featured_image) : asset('images/default_blog_image.jpg'),
+                'image' => $post->featured_image 
+                    ? asset('storage/' . $post->featured_image) 
+                    : asset('images/default_blog_image.jpg'),
                 'date' => $post->created_at->format('M d, Y'),
                 'author' => $post->author ?? 'Admin',
-                // 'comments' => $post->comments()->count(),
-                'link' => route('blog.showBlogDetail', $post->slug)
+                'slug' => $post->slug,
+                'link' => route('blog.showBlogDetail', $post->slug),
             ];
-        }
-
-        // Get current page from request, default to 1
-        $currentPage = LengthAwarePaginator::resolveCurrentPage() ?: 1;
-        
-        // Define how many items we want per page
-        $perPage = 6;
-        
-        // Slice the array to get the items for the current page
-        $currentPageItems = array_slice($allBlogs, ($currentPage - 1) * $perPage, $perPage);
-        
-        // Create LengthAwarePaginator instance
-        $blogs = new LengthAwarePaginator(
-            $currentPageItems,
-            count($allBlogs),
-            $perPage,
-            $currentPage,
-            [
-                'path' => $request->url(),
-                'query' => $request->query()
-            ]
-        );
+        });
 
         return view('blog.index', compact('blogs'));
     }
@@ -163,5 +210,35 @@ class BlogController extends Controller
         $blog['image'] = $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('images/default_blog_image.jpg');
         
         return view('blog.show', compact('blog', 'recentBlogs'));
+    }
+
+    public function uploadImage(Request $request)
+    {
+        // CKEditor usually sends the file in "upload"
+        if ($request->hasFile('upload')) {
+            $request->validate([
+                'upload' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:4096',
+            ]);
+
+            $file     = $request->file('upload');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // Store in storage/app/public/blogs/content
+            $path = $file->storeAs('blogs/content', $filename, 'public');
+
+            $url = asset('storage/' . $path); // public URL
+
+            // Response format expected by CKEditor (ckfinder adapter)
+            return response()->json([
+                'uploaded' => 1,
+                'fileName' => $filename,
+                'url'      => $url,
+            ]);
+        }
+
+        return response()->json([
+            'uploaded' => 0,
+            'error'    => ['message' => 'No file uploaded.'],
+        ], 400);
     }
 }

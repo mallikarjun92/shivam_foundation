@@ -78,6 +78,11 @@
             <label class="form-label">Skills</label>
             <p class="form-control-static">{{ $volunteer->skills ?? 'N/A' }}</p>
         </div>
+
+        <div class="mb-3">
+            <label class="form-label">Introduction</label>
+            <p class="form-control-static">{{ $volunteer->introduction ?? 'N/A' }}</p>
+        </div>
         
         <div class="mb-3">
             <label class="form-label">Interests</label>

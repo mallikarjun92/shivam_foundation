@@ -10,6 +10,12 @@
     </div>
     <div class="card-body">
         <p><strong>Name:</strong> {{ $donation->name }}</p>
+
+        @if($donation->donor_image)
+            <p><strong>Donor Image:</strong></p>
+            <img src="{{ Storage::url($donation->donor_image) }}" class="rounded-circle mb-3" width="150">
+        @endif
+
         <p><strong>Email:</strong> {{ $donation->email }}</p>
         <p><strong>Phone:</strong> {{ $donation->phone }}</p>
         <p><strong>PAN:</strong> {{ $donation->pan ?? 'N/A' }}</p>
@@ -23,6 +29,12 @@
                 {{ ucfirst($donation->status) }}
             </span>
         </p>
+
+        @if($donation->image)
+            <p><strong>Donation Image:</strong></p>
+            <img src="{{ Storage::url($donation->image) }}" class="img-fluid rounded mb-3" width="250">
+        @endif
+        
         <p><strong>Created At:</strong> {{ $donation->created_at->format('d M Y H:i') }}</p>
 
         <a href="{{ route('admin.donations.index') }}" class="btn btn-secondary">

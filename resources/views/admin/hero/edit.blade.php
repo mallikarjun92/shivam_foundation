@@ -10,7 +10,7 @@
             @csrf
             @method('PUT')
             
-            <div class="mb-3">
+            <div class="mb-3" style="display: none">
                 <label for="title" class="form-label">Title *</label>
                 <input type="text" class="form-control @error('title') is-invalid @enderror" 
                        id="title" name="title" value="{{ old('title', $hero->title) }}" required>

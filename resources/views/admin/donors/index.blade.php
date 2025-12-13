@@ -73,7 +73,7 @@
         </div>
 
         <div class="d-flex justify-content-center">
-            {{ $donors->links() }}
+            {{ $donors->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

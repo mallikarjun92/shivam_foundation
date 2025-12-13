@@ -27,6 +27,13 @@
         <a href="{{ route('admin.contacts.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back to Messages
         </a>
+        <form action="{{ route('admin.contacts.delete', $message->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this message?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-bg btn-danger">
+                <i class="bi bi-trash"></i> Delete
+            </button>
+        </form>
     </div>
 </div>
 @endsection

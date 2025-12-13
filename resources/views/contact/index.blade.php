@@ -105,7 +105,11 @@
 </script> --}}
 <script>
 
-	const map = L.map('map2').setView([13.006, 76.101], 16);
+	const map = L.map('map2', {
+    scrollWheelZoom: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+  }).setView([13.006, 76.101], 16);
 
 	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   // const tiles = L.tileLayer('http://a.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png', {

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPSTORM_META\map;
+
 class MaintenanceController extends Controller
 {
     // public function __construct()
@@ -24,14 +26,7 @@ class MaintenanceController extends Controller
 
     public function fixStorage(Request $request)
     {
-        $directories = [
-            'app/public/hero',
-            'app/public/hero/videos',
-            'app/public/events',
-            'app/public/galleries',
-            'app/public/volunteers',
-            'app/public/blogs',
-        ];
+        $directories = $this->getDefaultPublicDirectories();
 
         $results = [];
         
@@ -258,6 +253,7 @@ if (file_exists($filePath) && is_file($filePath)) {
         'webp' => 'image/webp',
         'pdf' => 'application/pdf',
         'txt' => 'text/plain',
+        'avif' => 'image/avif',
     ];
     
     $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
@@ -280,15 +276,11 @@ PHP;
     public function checkStatus()
     {
         $status = [];
-        
-        // Check storage directories
-        $directories = [
-            'app/public/hero' => storage_path('app/public/hero'),
-            'app/public/events' => storage_path('app/public/events'),
-            'app/public/galleries' => storage_path('app/public/galleries'),
-            'app/public/volunteers' => storage_path('app/public/volunteers'),
-            'app/public/blogs' => storage_path('app/public/blogs'),
-        ];
+
+        $directories = $this->getDefaultPublicDirectories();
+        $directories = array_combine($directories, array_map(function ($dir) {
+            return storage_path($dir);
+        }, $directories));
         
         foreach ($directories as $name => $path) {
             $status[$name] = [
@@ -309,5 +301,14 @@ PHP;
         ];
         
         return response()->json($status);
+    }
+
+    static public function getDefaultPublicDirectories()
+    {
+        $directoriesEnv = env('PUBLIC_STORAGE_DIRECTORIES', 'hero,hero/videos,events,galleries,volunteers,blogs');
+
+        return array_map(function ($dir) {
+            return 'app/public/' . trim($dir);
+        }, explode(',', $directoriesEnv));
     }
 }

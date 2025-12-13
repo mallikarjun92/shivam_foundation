@@ -12,6 +12,7 @@ if (file_exists($filePath) && is_file($filePath)) {
         'webp' => 'image/webp',
         'pdf' => 'application/pdf',
         'txt' => 'text/plain',
+        'avif' => 'image/avif',
     ];
     
     $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));

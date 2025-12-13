@@ -9173,3 +9173,100 @@ textarea.form-control {
     color: #f86f2d;
     margin-bottom: 20px;
 }
+
+/* Floating Social Media Icons CSS */
+/* Wrapper position */
+.social-toggle-wrapper {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+}
+
+/* Toggle Button */
+.social-toggle-btn {
+    width: 55px;
+    height: 55px;
+    background: #ff7f50;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .3s;
+}
+
+.social-toggle-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* Social icons container */
+#socialIcons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, transform .3s;
+    transform: translateY(20px);
+}
+
+/* When expanded */
+#socialIcons.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Individual icons */
+.float-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    text-decoration: none;
+    transition: all .3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.float-icon span {
+    color: #fff;
+}
+
+.float-icon:hover {
+    transform: translateY(-4px);
+}
+
+/* Colors */
+.whatsapp { background: #25D366; }
+.facebook { background: #1877f2; }
+.instagram { background: #E1306C; }
+.email { background: #ff7f50; }
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .social-toggle-wrapper {
+        bottom: 15px;
+        right: 15px;
+    }
+    .float-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+    .social-toggle-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+}

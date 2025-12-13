@@ -17,7 +17,9 @@ class AboutController extends Controller
 
 Vision: Every individual empowered through education, nutrition, and opportunity.
 Mission: Through our integrated programs, we provide learning support, nutrition, shelter, and livelihood training to create lasting positive change.'
-            ]
+            ],
+            'mission' => 'To empower underprivileged children and families through education, nutrition, shelter, and skill development, fostering a brighter future for all.',
+            'vision' => 'A world where every individual has access to quality education, nutritious food , and opportunities for personal and professional growth.',
         ];
 
         // Stats data
@@ -68,8 +70,8 @@ Mission: Through our integrated programs, we provide learning support, nutrition
         ];
 
         // fetch volunteers from the database
-        // $volunteers = \App\Models\Volunteer::latest()->take(6)->get();
-        $volunteers = \App\Models\Volunteer::latest()->get();
+        $volunteers = \App\Models\Volunteer::latest()->where('active', true)->take(6)->get();
+        // $volunteers = \App\Models\Volunteer::latest()->get();
 
         // merge volunteers to make 6 if less than 6
         $volunteerCount = $volunteers->count();

@@ -28,7 +28,7 @@ class FeaturedDonorController extends Controller
             'name' => 'required|string|max:255',
             'amount' => 'nullable|numeric',
             'donated_at' => 'nullable|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:2048',
             'published' => 'boolean'
         ]);
 
@@ -56,7 +56,7 @@ class FeaturedDonorController extends Controller
             'name' => 'required|string|max:255',
             'amount' => 'nullable|numeric',
             'donated_at' => 'nullable|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:2048',
             'published' => 'boolean'
         ]);
 

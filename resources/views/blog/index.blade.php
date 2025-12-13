@@ -22,7 +22,7 @@
         <div class="row d-flex">
           @foreach($blogs as $blog)
           <div class="col-md-4 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch">
+            <div class="blog-entry align-self-stretch w-100">
               <a href="{{ $blog['link'] }}" class="block-20" style="background-image: url('{{ asset($blog['image']) }}');">
               </a>
               <div class="text p-4 d-block">

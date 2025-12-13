@@ -21,7 +21,9 @@ class Donation extends Model
         'transaction_id',
         'urn',
         'status',
-        'qr_code'
+        'qr_code',
+        'image',
+        'donor_image'
     ];
 
     protected $casts = [

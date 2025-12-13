@@ -98,7 +98,7 @@
                 @if($donation->status == 'pending')
                 <div class="transaction-form mt-4">
                   <h5 class="text-center">Complete Your Donation</h5>
-                  <p class="text-center text-muted">After making the payment, please enter your UTR number below:</p>
+                  <p class="text-center text-muted">After making the payment, please enter your UTR number (or bank transaction number) below:</p>
                   
                   <div class="row justify-content-center">
                     <div class="col-md-8">

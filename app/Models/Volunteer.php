@@ -20,6 +20,7 @@ class Volunteer extends Model
         'zip_code',
         'skills',
         'interests',
+        'introduction',
         'availability',
         'previous_experience',
         'photo',

@@ -1,1 +1,19 @@
-about-us/volunteers
+about-us/volunteers --
+
++ about-us 
+    - mission content spacing  --
+    - mission background color change  --
+
+volunteers (4 qs) --
+    - place 
+    - occupation *
+    - about foundation
+    - front end - show 4 questions and answers
+
++ popup in homepage - upcoming events
+
++ social media icons - FB, YT --
+
++ admin menu - Mange team --
+
++ events default image missing --

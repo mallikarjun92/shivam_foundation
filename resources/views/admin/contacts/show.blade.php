@@ -12,6 +12,8 @@
         <p><strong>Name:</strong> {{ $message->name }}</p>
         <p><strong>Email:</strong> <a href="mailto:{{ $message->email }}">{{ $message->email }}</a></p>
         <p><strong>Subject:</strong> {{ $message->subject }}</p>
+        <p><strong>Company:</strong> {{ $message->company ?? 'N/A' }}</p>
+        <p><strong>Phone:</strong> {{ $message->phone ?? 'N/A' }}</p>
         <p><strong>Message:</strong></p>
         <div class="border p-3 rounded bg-light mb-3">
             {{ $message->message }}

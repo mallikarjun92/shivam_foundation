@@ -31,6 +31,9 @@ class VolunteerController extends Controller
             'address' => 'nullable|string',
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'occupation' => 'nullable|string|max:255',
+            'testimonial' => 'nullable|string',
             'zip_code' => 'nullable|string|max:10',
             'skills' => 'nullable|string',
             'interests' => 'nullable|string',
@@ -79,13 +82,17 @@ class VolunteerController extends Controller
             'address' => 'nullable|string',
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'occupation' => 'nullable|string|max:255',
+            'testimonial' => 'nullable|string',
             'zip_code' => 'nullable|string|max:10',
             'skills' => 'nullable|string',
             'interests' => 'nullable|string',
+            'introduction' => 'nullable|string',
             'availability' => 'nullable|string|max:255',
             'previous_experience' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:2048', // Photo validation
-            'active' => 'boolean'
+            'active' => 'boolean',
         ]);
 
         // Handle photo upload

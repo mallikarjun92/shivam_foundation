@@ -4,7 +4,8 @@
             /* background: rgb(250, 143, 61) !important; */
             color: #000 !important;
             /* background: #faaa3a;             */
-            background: url("/images/bg2.jpg");
+            /* background: url("/images/bg2.jpg"); */
+            background: #f8b739 !important;
         }
         .mission-section .overlay {
             position: absolute;
@@ -24,7 +25,7 @@
         <div class="row justify-content-center pb-3">
             <div class="col-md-7 heading-section ftco-animate text-center">
                 <h2 class="mb-4">Our Mission</h2>
-                <p>{{ $mission ?? '' }}</p>
+                <p>{!! nl2br($mission ?? '') !!}</p>
             </div>
         </div>
     </div>

@@ -3,10 +3,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+// use App\Http\Controllers\Controller;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\File;
+// use Illuminate\Support\Facades\Storage;
+// use App\Services\MigrationService;
+
 use App\Http\Controllers\Controller;
+use App\Services\MigrationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 use function PHPSTORM_META\map;
 
@@ -18,6 +27,13 @@ class MaintenanceController extends Controller
     //     $this->middleware('role:admin');
     //     $this->middleware('throttle:3,1')->only(['fixStorage', 'fixSymlink']); // Limit to 3 attempts per minute
     // }
+
+    protected $migrationService;
+
+    public function __construct()
+    {
+        $this->migrationService = new MigrationService();
+    }
 
     public function index()
     {
@@ -311,4 +327,184 @@ PHP;
             return 'app/public/' . trim($dir);
         }, explode(',', $directoriesEnv));
     }
+
+    /**
+     * Show migrations management page
+     */
+    public function migrations()
+    {
+        $migrationStatus = $this->migrationService->getMigrationStatus();
+        
+        return view('admin.maintenance.migrations', compact('migrationStatus'));
+    }
+    
+    /**
+     * Get SQL for a migration
+     */
+    public function getMigrationSql(Request $request)
+    {
+        $request->validate([
+            'filename' => 'required|string',
+            'direction' => 'required|in:up,down'
+        ]);
+        
+        $migrationPath = database_path('migrations/' . $request->filename);
+        
+        if (!File::exists($migrationPath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Migration file not found'
+            ]);
+        }
+        
+        // Extract SQL directly - no class name needed anymore
+        $sql = $this->migrationService->extractSqlFromMigration(
+            $migrationPath,
+            $request->direction
+        );
+        
+        return response()->json([
+            'success' => true,
+            'sql' => $sql,
+            'filename' => $request->filename,
+            'direction' => $request->direction
+        ]);
+    }
+    
+    /**
+     * Execute custom SQL
+     */
+    public function executeSql(Request $request)
+    {
+        $request->validate([
+            'sql' => 'required|string',
+            'migration_name' => 'nullable|string'
+        ]);
+        
+        $result = $this->migrationService->executeSql($request->sql);
+        
+        // If migration name provided and query successful, record it
+        if ($result['success'] && $request->migration_name) {
+            $batch = $this->migrationService->getNextBatchNumber();
+            DB::table('migrations')->insert([
+                'migration' => $request->migration_name,
+                'batch' => $batch
+            ]);
+        }
+        
+        return response()->json($result);
+    }
+    
+    /**
+     * Run a migration
+     */
+    public function runMigration(Request $request)
+    {
+        $request->validate([
+            'migration' => 'required|string',
+            'filename'  => 'required|string',
+            'passcode'  => 'required|string',
+        ]);
+
+        if (!$this->verifyMigrationPasscode($request->passcode)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid migration passcode'
+            ], 403);
+        }
+
+        $path = database_path('migrations/' . $request->filename);
+
+        if (!file_exists($path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Migration file not found',
+            ]);
+        }
+
+        try {
+            $instance = $this->migrationService->loadMigrationInstance($path);
+
+            // 🚀 Run migration
+            $instance->up();
+
+            // Record migration
+            \DB::table('migrations')->insert([
+                'migration' => $request->migration,
+                'batch'     => $this->migrationService->getNextBatchNumber(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Migration executed successfully',
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+    
+    /**
+     * Rollback a migration
+     */
+    public function rollbackMigration(Request $request)
+    {
+        $request->validate([
+            'migration' => 'required|string',
+            'filename'  => 'required|string',
+        ]);
+
+        if (!$this->verifyMigrationPasscode($request->passcode)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid migration passcode'
+            ], 403);
+        }
+
+        $path = database_path('migrations/' . $request->filename);
+
+        if (!file_exists($path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Migration file not found',
+            ]);
+        }
+
+        try {
+            $instance = $this->migrationService->loadMigrationInstance($path);
+
+            if (!method_exists($instance, 'down')) {
+                throw new \Exception('Down method not defined in migration');
+            }
+
+            // ⏪ Rollback migration
+            $instance->down();
+
+            // Remove record
+            \DB::table('migrations')
+                ->where('migration', $request->migration)
+                ->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Migration rolled back successfully',
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function verifyMigrationPasscode(?string $passcode): bool
+    {
+        return $passcode
+            && hash_equals(env('MIGRATION_ADMIN_PASSCODE'), $passcode);
+    }
+
 }

@@ -55,6 +55,15 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mb-3">
+                <label for="occupation" class="form-label">Occupation</label>
+                <input type="text" class="form-control @error('occupation') is-invalid @enderror" 
+                       id="occupation" name="occupation" value="{{ old('occupation', $volunteer->occupation) }}">
+                @error('occupation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             
             <div class="mb-3">
                 <label for="address" class="form-label">Address</label>
@@ -66,7 +75,7 @@
             </div>
             
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="city" class="form-label">City</label>
                         <input type="text" class="form-control @error('city') is-invalid @enderror" 
@@ -76,7 +85,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="state" class="form-label">State</label>
                         <input type="text" class="form-control @error('state') is-invalid @enderror" 
@@ -86,7 +95,17 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control @error('country') is-invalid @enderror" 
+                               id="country" name="country" value="{{ old('country', $volunteer->country) }}">
+                        @error('country')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="zip_code" class="form-label">Zip Code</label>
                         <input type="text" class="form-control @error('zip_code') is-invalid @enderror" 
@@ -121,6 +140,15 @@
                 <textarea class="form-control @error('introduction') is-invalid @enderror" 
                           id="introduction" name="introduction" rows="2">{{ old('introduction', $volunteer->introduction) }}</textarea>
                 @error('introduction')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="testimonial" class="form-label">Testimonial</label>
+                <textarea class="form-control @error('testimonial') is-invalid @enderror" 
+                          id="testimonial" name="testimonial" rows="2">{{ old('testimonial', $volunteer->testimonial) }}</textarea>
+                @error('testimonial')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -174,3 +202,30 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    ClassicEditor
+        .create(document.querySelector('#introduction'), {
+            ckfinder: {
+                // Pass CSRF token in query so Laravel doesn’t block it
+                uploadUrl: "{{ route('admin.blogs.upload-image') }}?_token={{ csrf_token() }}"
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#testimonial'), {
+            ckfinder: {
+                // Pass CSRF token in query so Laravel doesn’t block it
+                uploadUrl: "{{ route('admin.blogs.upload-image') }}?_token={{ csrf_token() }}"
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+@endpush

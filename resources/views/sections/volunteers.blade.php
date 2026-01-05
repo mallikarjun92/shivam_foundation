@@ -32,7 +32,8 @@
                         <div class="img" style="background-image: url({{ $volunteer['photo'] ? asset('storage/' . $volunteer['photo']) : asset('images/default-volunteer.jpg') }});"></div>
                     </div>
                     <div class="info">
-                        <h3 class="mb-2">{{ $volunteer['first_name'] }} {{ $volunteer['last_name'] }}</h3>
+                        {{-- <h3 class="mb-2">{{ $volunteer['first_name'] }} {{ $volunteer['last_name'] }}</h3> --}}
+                        <a href={{ url("/volunteers/".($volunteer['id'] ?? "#")) }}><h3 class="mb-2">{{ $volunteer['first_name'] }} {{ $volunteer['last_name'] }}</h3></a>
                         <span class="position">Volunteer</span>
                         {{-- @if($volunteer['interests'])
                             <p class="mt-3">{{ $volunteer['interests'] }}</p>

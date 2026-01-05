@@ -7325,14 +7325,18 @@ h1, h2, h3, h4, h5,
     padding-bottom: .9rem;
     padding-left: 20px;
     padding-right: 20px;
-    color: rgba(255, 255, 255, 0.8);
+    /* color: rgba(255, 255, 255, 0.8); */
+    color: #000;
     font-weight: 400;
     opacity: 1 !important; }
     .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover {
-      color: #fff; }
+      /* color: #fff;  */
+      color: #f86f2d;
+      }
   .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu {
-    border: none;
+    /* border: none; */
     background: #fff;
+    /* background: #f8b739; */
     -webkit-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
     -moz-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
     box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41); }
@@ -7781,7 +7785,8 @@ h1, h2, h3, h4, h5,
     bottom: 0;
     content: '';
     opacity: .9;
-    background: #f86f2d; }
+    background: #f86f2d;
+    background: #f8b739; }
   .ftco-section-3 .img {
     width: 100%; }
   .ftco-section-3 .img-2 {
@@ -9204,6 +9209,10 @@ textarea.form-control {
     transform: rotate(90deg);
 }
 
+.social-toggle-btn span {
+    color: #fff;
+}
+
 /* Social icons container */
 #socialIcons {
     display: flex;
@@ -9252,6 +9261,7 @@ textarea.form-control {
 .facebook { background: #1877f2; }
 .instagram { background: #E1306C; }
 .email { background: #ff7f50; }
+.youtube { background: #FF0000; }
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
@@ -9269,4 +9279,7 @@ textarea.form-control {
         height: 50px;
         font-size: 22px;
     }
+}
+.dropdown-menu .dropdown-item.active, .dropdown-menu .dropdown-item:hover {
+  background: #f86f2d !important;
 }

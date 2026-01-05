@@ -38,7 +38,7 @@
                     <h2 class="ftco-heading-2">Site Links</h2>
                     <ul class="list-unstyled">
                         <li><a href="{{ url('/') }}" class="py-2 d-block">Home</a></li>
-                        <li><a href="{{ url('about') }}" class="py-2 d-block">About</a></li>
+                        <li><a href="{{ url('about-us') }}" class="py-2 d-block">About</a></li>
                         <li><a href="{{ url('donate') }}" class="py-2 d-block">Donate</a></li>
                         {{-- <li><a href="{{ url('causes') }}" class="py-2 d-block">Causes</a></li>
                         <li><a href="{{ url('event') }}" class="py-2 d-block">Event</a></li> --}}

@@ -14,6 +14,8 @@ class Contact extends Model
         'email',
         'subject',
         'message',
+        'company',
+        'phone',
         'ip_address',
         'user_agent',
         'is_new',

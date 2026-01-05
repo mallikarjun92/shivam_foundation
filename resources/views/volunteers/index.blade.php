@@ -64,11 +64,11 @@
                                     {{ Str::limit($volunteer->interests, 70) }}
                                 </p>
                                 @endif --}}
-                                @if($volunteer->introduction)
+                                {{-- @if($volunteer->introduction)
                                 <p class="mt-3 mb-0 text-muted">
-                                    {{ Str::limit($volunteer->introduction, 70) }}
+                                    {!! Str::limit($volunteer->introduction, 70) !!}
                                 </p>
-                                @endif
+                                @endif --}}
                             </div>
 
                         </div>

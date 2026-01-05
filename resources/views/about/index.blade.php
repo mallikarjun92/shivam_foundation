@@ -26,14 +26,19 @@
     			<div class="col-md-6 pl-md-5 ftco-animate">
     				<h2 class="mb-4">{{ $aboutData['title'] }}</h2>
     				@foreach($aboutData['description'] as $paragraph)
-    				<p>{{ $paragraph }}</p>
+    				<p>{!! nl2br($paragraph) !!}</p>
     				@endforeach
     			</div>
     		</div>
     	</div>
     </section>
+
+    @include('sections.vision', ['vision' => $aboutData['vision']])
     
-    @include('sections.counter')
+
+    @include('sections.mission', ['mission' => $aboutData['mission']])
+    
+    {{-- @include('sections.counter') --}}
 
     <section class="ftco-section bg-light">
       <div class="container">
@@ -74,11 +79,7 @@
       </div>
     </section>
 
-    @include('sections.mission', ['mission' => $aboutData['mission']])
-
-    @include('sections.vision', ['vision' => $aboutData['vision']])
-
-    @include('sections.volunteer')
+    {{-- @include('sections.volunteer') --}}
 
     @include('sections.volunteers', ['volunteers' => $volunteers])
 

@@ -24,7 +24,7 @@ Route::prefix('blog')->group(function () {
 });
 
 // About routes
-Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/about-us', [AboutController::class, 'index'])->name('about');
 
 // Contact routes
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
@@ -56,11 +56,24 @@ Route::get('/programs/ramayana', [App\Http\Controllers\ProgramsController::class
 
 // CSR fund page
 Route::get('/csr', [App\Http\Controllers\CSRController::class, 'index'])->name('csr.index');
+Route::get('/csr2', [App\Http\Controllers\CSRController::class, 'index2'])->name('csr.index2');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// admin maintenance routes
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin/maintenance')->name('admin.maintenance.')->group(function () {
+    // ... existing routes ...
+    
+    Route::get('/migrations', [MaintenanceController::class, 'migrations'])->name('migrations');
+    Route::post('/get-migration-sql', [MaintenanceController::class, 'getMigrationSql'])->name('get-migration-sql');
+    Route::post('/execute-sql', [MaintenanceController::class, 'executeSql'])->name('execute-sql');
+    Route::post('/run-migration', [MaintenanceController::class, 'runMigration'])->name('run-migration');
+    Route::post('/rollback-migration', [MaintenanceController::class, 'rollbackMigration'])->name('rollback-migration');
 });
 
 // Admin routes with 'auth' and 'role:admin' middleware
@@ -97,6 +110,13 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('programs-enrollments', App\Http\Controllers\Admin\ProgramsEnrollmentController::class);
 
         Route::resource('statistics', App\Http\Controllers\Admin\StatisticController::class);
+
+        Route::resource(
+            'impact-reports',
+            App\Http\Controllers\Admin\ImpactReportController::class
+        );
+
+        Route::resource('teams', App\Http\Controllers\Admin\TeamController::class);
 
         // Contact messages
         Route::get('contacts', [ContactController::class, 'listMessages'])->name('contacts.index');

@@ -19,7 +19,8 @@
                         </div>
                         <h3 class="heading mb-4"><a href="{{ route('events.show', $event['id']) }}">{{ $event['title'] }}</a></h3>
                         <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> {{ $event['time'] }}</span> <span><i class="icon-map-o"></i> {{ $event['venue'] }}</span></p>
-                        <p>{{ $event['description'] }}</p>
+                        {{-- <p>{{ $event['description'] }}</p> --}}
+                        <p>{{ $event['excerpt'] }}</p>
                         {{-- <p><a href="{{ url('event') }}">Join Event <i class="ion-ios-arrow-forward"></i></a></p> --}}
                     </div>
                 </div>

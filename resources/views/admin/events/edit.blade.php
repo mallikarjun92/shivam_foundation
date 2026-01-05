@@ -186,5 +186,17 @@
     // Trigger input event to show initial character count
     document.getElementById('excerpt').dispatchEvent(new Event('input'));
 </script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            ckfinder: {
+                // Pass CSRF token in query so Laravel doesn’t block it
+                uploadUrl: "{{ route('admin.blogs.upload-image') }}?_token={{ csrf_token() }}"
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 @endpush
 @endsection

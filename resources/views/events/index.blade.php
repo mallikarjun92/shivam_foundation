@@ -54,7 +54,8 @@
                             </span>
                         </p>
 
-                        <p>{{ $event['description'] }}</p>
+                        {{-- <p>{{ $event['description'] }}</p> --}}
+                        <p>{{ $event['excerpt'] }}</p>
                     </div>
                 </div>
             </div>

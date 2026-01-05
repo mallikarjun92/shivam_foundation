@@ -31,7 +31,9 @@ class ContactController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'subject' => 'required|string|max:255',
-            'message' => 'required|string|min:10'
+            'message' => 'required|string|min:10',
+            'company' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         if ($validator->fails()) {
@@ -45,6 +47,8 @@ class ContactController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'subject' => $request->subject,
+            'company' => $request->company ?? null,
+            'phone' => $request->phone ?? null,
             'message' => $request->message,
             'ip_address' => $request->ip(),
             'user_agent' => $request->header('User-Agent'),

@@ -197,9 +197,26 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.impact-reports.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.impact-reports.index') }}">
+                                <i class="bi bi-journal-text"></i> Impact Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.teams.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.teams.index') }}">
+                                <i class="bi bi-people"></i> Manage Teams
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.maintenance.*') ? 'active' : '' }}" 
                             href="{{ route('admin.maintenance.index') }}">
                                 <i class="bi bi-wrench"></i> Maintenance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.maintenance.migrations') }}">
+                                <i class="bi bi-database-gear"></i> Database Migrations
                             </a>
                         </li>
                         <li class="nav-item mt-3">

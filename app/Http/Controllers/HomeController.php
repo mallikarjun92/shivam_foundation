@@ -166,13 +166,13 @@ class HomeController extends Controller
             ];
         }
 
-        $eventsData = \App\Models\Event::latest()->take(3)->get();
+        $eventsData = \App\Models\Event::where('published', true)->latest()->take(3)->get();
         $events = [];
 
         foreach ($eventsData as $event) {
             $events[] = [
                 'id' => $event->id,
-                'image' => $event->image ? 'storage/'.$event->image : asset('images/default_event_image.jpg'),
+                'image' => $event->image ? 'storage/'.$event->image : asset('images/default-event.jpg'),
                 'date' => $event->event_date->format('M d, Y'),
                 'organizer' => $event->organizer,
                 // 'comments' => $event->comments_count ?? 0,
@@ -185,6 +185,35 @@ class HomeController extends Controller
                 'link' => route('events.show', $event->slug)
             ];
         }
+
+        // upcoming events for popups
+        $upcomingEvents = \App\Models\Event::where('event_date', '>=', now())
+                            ->where('published', true)
+                            ->latest()
+                            // ->take(3)
+                            ->get();
+
+        // dd($upcomingEvents);
+        
+        $uevents = [];
+        foreach($upcomingEvents as $event) {
+            $uevents[] = [
+                'id' => $event->id,
+                'image' => $event->image ? 'storage/'.$event->image : asset('images/default-event.jpg'),
+                'date' => $event->event_date->format('M d, Y'),
+                'organizer' => $event->organizer,
+                // 'comments' => $event->comments_count ?? 0,
+                'title' => $event->title,
+                'time' => $event->event_date->format('h:i A'),
+                'venue' => $event->location,
+                'description' => \Illuminate\Support\Str::limit($event->description, 100),
+                'excerpt' => $event->excerpt,
+                'slug' => $event->slug,
+                'link' => route('events.show', $event->slug)
+            ];
+        }
+
+        // dd($uevents);
 
         // Recent blogs for footer
         $recentBlogs = $blogs; // Using the same blogs fetched from the database
@@ -199,7 +228,8 @@ class HomeController extends Controller
             'events',
             'recentBlogs',
             // 'heroContent',
-            'successBlogs'
+            'successBlogs',
+            'uevents'
         ));
     }
 }

@@ -23,7 +23,7 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Event Description *</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
-                                  id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
+                                  id="description" name="description" rows="5" >{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -168,6 +168,30 @@
             counter.style.color = '';
         }
     });
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            ckfinder: {
+                // Pass CSRF token in query so Laravel doesn’t block it
+                uploadUrl: "{{ route('admin.blogs.upload-image') }}?_token={{ csrf_token() }}"
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<script>
+document.querySelector('form').addEventListener('submit', function (e) {
+    const editorData = ClassicEditor.instances
+        ? ClassicEditor.instances.description.getData()
+        : document.querySelector('#description').value;
+
+    if (!editorData || editorData.trim() === '') {
+        e.preventDefault();
+        alert('Event description is required.');
+    }
+});
 </script>
 @endpush
 @endsection
